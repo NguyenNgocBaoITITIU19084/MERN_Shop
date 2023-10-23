@@ -1,23 +1,37 @@
 import { React, useState } from "react";
 import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai'
-import styles from '../../styles/styles'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {RxAvatar} from 'react-icons/rx';
+import axios from 'axios'
 
+import styles from '../../styles/styles'
+import {server} from "../../server"
 const SignUp = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("")
   const [password, setPassword] = useState("")
-  const [rePassword,setRePassword] = useState("")
   const [visible, setVisible] = useState(false)
-  const [reVisible, setReVisible] = useState(false)
   const [avatar,setAvatar] = useState(null)
-
+  const navigate = useNavigate()
   const handleSubmit = (e) => {
-    console.log('submit');
+    e.preventDefault();
+    const config = {headers: {"Content-Type":"multipart/form-data"}};
+    
+    const newForm = new FormData();
+
+    newForm.append("file",avatar);
+    newForm.append("name", name);
+    newForm.append("email",email);
+    newForm.append("password", password);
+    axios.post(`${server}/user/create-user`,newForm, config).then((res) => {
+      if(res.data.sucess === true) {
+        navigate("/")
+      }
+    }).catch((err) => console.log(err))
   }
 
   const handleFileChanged = (e) => {
-    const file = e.target.files['0'];
+    const file = e.target.files[0];
     setAvatar(file);
   }
 
@@ -30,7 +44,13 @@ const SignUp = () => {
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700">Full Name</label>
+                      <div className="mt-1">
+                          <input className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" type="text" name="name" required value={name}  onChange={(e) => setName(e.target.value)}></input>
+                      </div>
+                    </div>
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
                       <div className="mt-1">
@@ -50,19 +70,7 @@ const SignUp = () => {
                           }
                       </div>
                     </div>
-                    <div>
-                      <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                      <div className="mt-1 relative">
-                          <input className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" type={visible ? "text" : "password"}name="password" autoComplete="current-password" required value={rePassword}  onChange={(e) => setRePassword(e.target.value)}></input>
-                          {
-                            reVisible ? (
-                              <AiOutlineEye className="absolute right-2 top-2 cursor-pointer" size={25} onClick={() => setReVisible(false)}/>
-                            ) : (
-                              <AiOutlineEyeInvisible className="absolute right-2 top-2 cursor-pointer" size={25} onClick={() => setReVisible(true)}/>
-                            )
-                          }
-                      </div>
-                    </div>
+                    
                     <div>
                       <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">
 
