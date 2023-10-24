@@ -6,6 +6,7 @@ import axios from 'axios'
 
 import styles from '../../styles/styles'
 import {server} from "../../server"
+import { toast } from "react-toastify";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("")
@@ -24,10 +25,14 @@ const SignUp = () => {
     newForm.append("email",email);
     newForm.append("password", password);
     axios.post(`${server}/user/create-user`,newForm, config).then((res) => {
-      if(res.data.sucess === true) {
-        navigate("/")
-      }
-    }).catch((err) => console.log(err))
+      setEmail("")
+      setName("")
+      setPassword("")
+      setAvatar(null)
+      toast.success(res.data.message);
+    }).catch((err) => {
+      toast.error(err.response.data.message);
+    })
   }
 
   const handleFileChanged = (e) => {

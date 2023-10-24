@@ -23,8 +23,6 @@ route.post("/create-user", upload.single("file"), async (req, res, next) => {
         if (err) {
           console.log(err);
           res.status(500).json({ message: "Error deleting file" });
-        } else {
-          res.json({ message: "File deleted successfully" });
         }
       });
       return next(new ErrorHandler("User already Exist", 400));
@@ -41,7 +39,7 @@ route.post("/create-user", upload.single("file"), async (req, res, next) => {
     };
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `https://eshop-tutorial-pyri.vercel.app/activation/${activationToken}`;
+    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
     try {
       await sendMail({
         email: user.email,
@@ -94,7 +92,7 @@ route.post(
         avatar,
         password,
       });
-      sendToken(newUser, 201, res);
+      sendToken(user, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
