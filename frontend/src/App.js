@@ -12,6 +12,7 @@ import {
   HomePage,
   ActivationPage,
   ProductsPage,
+  BestSellingPage,
 } from "./Routes.js";
 import { loadUser } from "./redux/actions/user";
 
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/products" element={<ProductsPage />} />
+        <Route path="/best-selling" element={<BestSellingPage />} />
         <Route
           path="/activation/:activation_token"
           element={<ActivationPage />}
