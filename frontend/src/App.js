@@ -6,7 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
 import Store from "./redux/store";
-import { LoginPage, SignUpPage, HomePage, ActivationPage } from "./Routes.js";
+import {
+  LoginPage,
+  SignUpPage,
+  HomePage,
+  ActivationPage,
+  ProductsPage,
+} from "./Routes.js";
 import { loadUser } from "./redux/actions/user";
 
 const App = () => {
@@ -19,6 +25,7 @@ const App = () => {
         <Route path="/home-page" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/products" element={<ProductsPage />} />
         <Route
           path="/activation/:activation_token"
           element={<ActivationPage />}
